@@ -16,7 +16,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.REACT_APP_URL}>
       <App />
     </BrowserRouter>
   </ApolloProvider>
