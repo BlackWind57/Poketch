@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Poketch/static/css/main.675945ed.chunk.css",
-    "main.js": "/Poketch/static/js/main.a1cec612.chunk.js",
-    "main.js.map": "/Poketch/static/js/main.a1cec612.chunk.js.map",
+    "main.js": "/Poketch/static/js/main.5b507a30.chunk.js",
+    "main.js.map": "/Poketch/static/js/main.5b507a30.chunk.js.map",
     "runtime-main.js": "/Poketch/static/js/runtime-main.048f6419.js",
     "runtime-main.js.map": "/Poketch/static/js/runtime-main.048f6419.js.map",
     "static/js/2.2d5c8236.chunk.js": "/Poketch/static/js/2.2d5c8236.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.048f6419.js",
     "static/js/2.2d5c8236.chunk.js",
     "static/css/main.675945ed.chunk.css",
-    "static/js/main.a1cec612.chunk.js"
+    "static/js/main.5b507a30.chunk.js"
   ]
 }
