@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 import { gql, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -127,19 +127,16 @@ const BottomMenu = styled.div `
 
 
 export const PokemonDetail = ( route ) => {
-  const { addPokemonToMyList, pokemons, updatePokemons } = useContext(GlobalContext);
+  const { addPokemonToMyList, pokemons, fetchData } = useContext(GlobalContext);
 
   const [showMore, setShowMore] = useState ({
     count: 4,
     expanded: false
   });
 
-  /*useEffect ( async () => {
-    console.log('trigger useEffect');
-    const pokemons = await fetch("http://localhost:5000/pokemon/my-list");
-
-    updatePokemons ( pokemons );
-  }, []);*/
+  useEffect ( () => {
+    fetchData();
+  }, []);
 
   // Get detail of the pokemon
   const { loading, error, data } = useQuery(GET_POKEMON_DETAIL, {
@@ -163,12 +160,29 @@ export const PokemonDetail = ( route ) => {
     }
   }
 
-  const handleSuccessCatch = async ( pokemon ) => {
+  const nickNameExists = ( nick_name, pokemon ) => {
+    if ( nick_name == null ) return false;
+
+    for (let i = 0; i < pokemons.length; i++) {
+      if ( pokemons[i].name === pokemon.name
+          && pokemons[i].nick_name.toLowerCase() === nick_name.toLowerCase() ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const handleSuccessCatch = ( pokemon ) => {
     try {
       let num = MathLib.randomNumber ();
 
       if ( num === 1 ) {
-        const enteredName = prompt ("Enter the pokemon's nickname ");
+
+        var enteredName = prompt ("Congratulations! You have captured a/an "+ pokemon.name +". Enter the pokemon's nickname.");
+
+        while ( nickNameExists (enteredName, pokemon) ) {
+          enteredName = prompt ("The entered nickname for that pokemon has already existed. Please enter a different nickname.");
+        }
 
         var savedPokemon = {
           name: pokemon.name,
@@ -189,7 +203,7 @@ export const PokemonDetail = ( route ) => {
   const handleCatch = async ( pokemon ) => {
 
     try {
-      let result = await fetch("http://localhost:5000/pokemon/catch", {
+      var result = await fetch("http://localhost:5000/pokemon/catch", {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -197,9 +211,8 @@ export const PokemonDetail = ( route ) => {
         },
         body: JSON.stringify ( pokemon )
       });
-      console.log( result );
 
-      if ( result ) {
+      if ( result.ok ) {
         alert ( pokemon.nick_name + " has been captured. You can view your pokemon on My Pokemons." );
 
         addPokemonToMyList ( pokemon );
@@ -271,7 +284,7 @@ export const PokemonDetail = ( route ) => {
             </Link>
 
               <button
-                onClick={() => handleSuccessCatch ( pokemon ) }
+                onClick={ handleSuccessCatch.bind ( this, pokemon ) }
                 title="Add To My PokeList"
               >
                 Catch

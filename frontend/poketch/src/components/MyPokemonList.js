@@ -65,26 +65,12 @@ export const PokemonList = () => {
     loading,
     error,
     removePokemonFromMyList,
-    fetchingMyPokemons,
-    fetchingError
+    fetchData
   } = useContext(GlobalContext);
 
   useEffect ( () => {
       // Fetch pokemons from db
-      try {
-        fetch("http://localhost:5000/pokemon/my-list")
-        .then ( response => response.json() )
-        .then ( data => {
-          fetchingMyPokemons ( data );
-        })
-        .catch ( error => {
-          console.error( error );
-          fetchingError ( error );
-        });
-
-      } catch (e) {
-        console.log(e);
-      }
+      fetchData();
   }, []);
 
   const handleRelease = async ( pokemon ) => {

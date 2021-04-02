@@ -42,6 +42,25 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
+  function fetchData() {
+    try {
+      if (state.loading) {
+        fetch("http://localhost:5000/pokemon/my-list")
+        .then ( response => response.json() )
+        .then ( data => {
+          fetchingMyPokemons ( data );
+        })
+        .catch ( error => {
+          console.error( error );
+          fetchingError ( error );
+        });
+      }
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -50,8 +69,7 @@ export const GlobalProvider = ({ children }) => {
         error: state.error,
         addPokemonToMyList,
         removePokemonFromMyList,
-        fetchingMyPokemons,
-        fetchingError
+        fetchData
       }}
     >
       {children}

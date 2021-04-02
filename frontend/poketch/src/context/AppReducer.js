@@ -24,23 +24,6 @@ export default function appReducer(state, action) {
         bodyObject: {}
       }
 
-    /*
-    case "":
-      const updatedEmployee = action.payload;
-
-      const updatedEmployees = state.employees.map((employee) => {
-        if (employee.id === updatedEmployee.id) {
-          return updatedEmployee;
-        }
-        return employee;
-      });
-
-      return {
-        ...state,
-        employees: updatedEmployees,
-      };
-    */
-
     case "REMOVE_POKEMON":
       return {
         ...state,
