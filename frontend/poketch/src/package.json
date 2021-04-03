@@ -9,7 +9,7 @@
     "start:lambda": "netlify-lambda serve api",
     "start:app": "cd client && yarn start",
     "build": "run-p build:**",
-    "build:app": "cd client && npm run build"
+    "build:app": "cd client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
