@@ -6,6 +6,8 @@ const ObjectId = require('mongodb').ObjectID;
 const MongoClient = require ('mongodb').MongoClient;
 const connectionString = "mongodb+srv://b6H7PBTD4GIGUBxV:w9b9YMtAyQmqnEJY@cluster0.9cfel.mongodb.net/pokemons?retryWrites=true&w=majority"
 
+const app = express();
+const router = express.Router();
 
 MongoClient.connect(connectionString, { useUnifiedTopology: true })
   .then(client => {
@@ -13,8 +15,6 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     const db = client.db('pokemons');
     const myPokemonCol = db.collection('my-pokemon');
 
-    const app = express();
-    const router = express.Router();
     //const port = process.env.PORT || 5000;
 
     app.use(function(req, res, next) {
@@ -92,8 +92,8 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     }
 
     //app.listen(port, () => console.log(`Listening on port ${port}`));
-
-    module.exports = app;
-    module.exports.handler = serverless( app );
   })
   .catch( console.error );
+
+  module.exports = app;
+  module.exports.handler = serverless( app );
