@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import './tailwind.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -16,9 +16,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <BrowserRouter basename={process.env.REACT_APP_URL}>
+    <HashRouter basename={process.env.REACT_APP_URL}>
       <App />
-    </BrowserRouter>
+    </HashRouter>
   </ApolloProvider>
   ,document.getElementById('root')
 );

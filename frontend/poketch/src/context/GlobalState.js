@@ -45,7 +45,7 @@ export const GlobalProvider = ({ children }) => {
   function fetchData() {
     try {
       if (state.loading) {
-        fetch("http://localhost:5000/pokemon/my-list")
+        fetch(process.env.REACT_APP_URL +"/pokemon/my-list")
         .then ( response => response.json() )
         .then ( data => {
           fetchingMyPokemons ( data );

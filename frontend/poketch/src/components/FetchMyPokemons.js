@@ -32,7 +32,7 @@ function FetchMyPokemons () {
     useEffect ( () => {
         // Fetch pokemons from db
       try {
-        fetch("http://localhost:5000/pokemon/my-list")
+        fetch(process.env.REACT_APP_URL + "/pokemon/my-list")
         .then ( response => {
           dispatch ( { type: 'FETCH_SUCCESS', payload: response.data });
         })
