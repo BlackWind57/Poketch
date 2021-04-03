@@ -45,7 +45,7 @@ export const GlobalProvider = ({ children }) => {
   function fetchData() {
     try {
       if (state.loading) {
-        fetch(process.env.REACT_APP_URL +"/pokemon/my-list")
+        fetch("/.netlify/functions/server/api/my-list")
         .then ( response => response.json() )
         .then ( data => {
           fetchingMyPokemons ( data );

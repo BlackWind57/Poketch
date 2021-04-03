@@ -203,7 +203,7 @@ export const PokemonDetail = ( route ) => {
   const handleCatch = async ( pokemon ) => {
 
     try {
-      var result = await fetch(process.env.REACT_APP_URL+"/pokemon/catch", {
+      var result = await fetch("/.netlify/functions/server/api/catch", {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

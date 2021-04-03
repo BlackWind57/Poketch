@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const serverless = require('serverless-http');
 const path = require('path');
 const ObjectId = require('mongodb').ObjectID;
 const MongoClient = require ('mongodb').MongoClient;
@@ -13,7 +14,8 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     const myPokemonCol = db.collection('my-pokemon');
 
     const app = express();
-    const port = process.env.PORT || 5000;
+    const router = express.Router();
+    //const port = process.env.PORT || 5000;
 
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
@@ -27,11 +29,11 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
 
     // API calls
     //
-    app.get ('/', (req, res) => {
+    router.get ('/', (req, res) => {
       res.send ({ text: "You are not authorized to access this site. Please email cristoforus.darryl@gmail.com for further enquiries." });
     });
 
-    app.get('/pokemon/my-list', ( req, res ) => {
+    router.get('/api/my-list', ( req, res ) => {
 
       myPokemonCol.find({}).toArray()
       .then ( response => {
@@ -45,7 +47,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
       // TODO: return list of my pokemon list
     });
 
-    app.post('/pokemon/catch', ( req, res ) => {
+    router.post('/api/catch', ( req, res ) => {
 
       myPokemonCol.insertOne ( req.body )
       .then ( response => {
@@ -58,7 +60,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
       // TODO: catch pokemon and put in my pokemon list
     });
 
-    app.post('/pokemon/release', ( req, res ) => {
+    router.post('/api/release', ( req, res ) => {
 
       console.log( req.body );
       myPokemonCol.findOneAndDelete ( { '_id': ObjectId( req.body._id ) } )
@@ -74,19 +76,24 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
       // TODO: release pokemon from my pokemon list
     });
 
+    app.use('/.netlify/functions/server', router);
 
 
     if (process.env.NODE_ENV === 'production') {
+      console.log(__dirname);
+
       // Serve any static files
-      app.use(express.static(path.join(__dirname, 'client/build')));
+      app.use(express.static(path.join(__dirname, '../../build')));
 
       // Handle React routing, return all requests to React app
       app.get('*', function(req, res) {
-        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+        res.sendFile(path.join(__dirname, '../../build', 'index.html'));
       });
     }
 
-    app.listen(port, () => console.log(`Listening on port ${port}`));
+    //app.listen(port, () => console.log(`Listening on port ${port}`));
 
+    module.exports = app;
+    module.exports.handler = serverless( app );
   })
   .catch( console.error );

@@ -16,7 +16,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <HashRouter basename={process.env.REACT_APP_URL}>
+    <HashRouter>
       <App />
     </HashRouter>
   </ApolloProvider>

@@ -75,7 +75,7 @@ export const PokemonList = () => {
 
   const handleRelease = async ( pokemon ) => {
     try {
-      let result = await fetch(process.env.REACT_APP_URL+"/pokemon/release", {
+      let result = await fetch("/.netlify/functions/server/api/release", {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
