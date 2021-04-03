@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalState';
 
@@ -71,7 +71,7 @@ export const PokemonList = () => {
   useEffect ( () => {
       // Fetch pokemons from db
       fetchData();
-  }, []);
+  });
 
   const handleRelease = async ( pokemon ) => {
     try {

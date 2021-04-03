@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 import { gql, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -136,7 +136,7 @@ export const PokemonDetail = ( route ) => {
 
   useEffect ( () => {
     fetchData();
-  }, []);
+  });
 
   // Get detail of the pokemon
   const { loading, error, data } = useQuery(GET_POKEMON_DETAIL, {

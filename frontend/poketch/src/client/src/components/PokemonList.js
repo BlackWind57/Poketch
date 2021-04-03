@@ -71,7 +71,6 @@ const Box = styled.div`
 
 
 export const PokemonList = () => {
-  const { addPokemonToMyList } = useContext(GlobalContext);
 
   // Fetch pokemons from Pokemon Graphql as data
   const { loading, error, data } = useQuery(GET_POKEMONS, {
