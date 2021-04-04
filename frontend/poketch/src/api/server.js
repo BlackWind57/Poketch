@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const serverless = require('serverless-http');
 const path = require('path');
 const ObjectId = require('mongodb').ObjectID;
-const MongoDB = require('./MongoDB');
+const { connect } = require('./MongoDB');
 
 const app = express();
 const router = express.Router();
@@ -26,10 +26,8 @@ router.get ('/', (req, res) => {
 });
 
 router.get('/api/my-list', ( req, res ) => {
-
-  MongoDB.connect()
+  connect()
   .then(client => {
-    console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
     const myPokemonCol = db.collection('my-pokemon');
 
@@ -50,9 +48,8 @@ router.get('/api/my-list', ( req, res ) => {
 
 router.post('/api/catch', ( req, res ) => {
 
-  MongoDB.connect()
+  connect()
   .then(client => {
-    console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
     const myPokemonCol = db.collection('my-pokemon');
 
@@ -72,9 +69,8 @@ router.post('/api/catch', ( req, res ) => {
 
 router.post('/api/release', ( req, res ) => {
 
-  MongoDB.connect()
+  connect()
   .then(client => {
-    console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
     const myPokemonCol = db.collection('my-pokemon');
 
