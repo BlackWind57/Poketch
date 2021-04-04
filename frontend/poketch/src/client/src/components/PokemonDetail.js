@@ -161,7 +161,7 @@ export const PokemonDetail = ( route ) => {
   }
 
   const nickNameExists = ( nick_name, pokemon ) => {
-    if ( nick_name == null ) return false;
+    if ( nick_name === null || nick_name === '' ) return false;
 
     for (let i = 0; i < pokemons.length; i++) {
       if ( pokemons[i].name === pokemon.name
@@ -181,7 +181,7 @@ export const PokemonDetail = ( route ) => {
         var enteredName = prompt ("Congratulations! You have captured a/an "+ pokemon.name +". Enter the pokemon's nickname.");
 
         while ( nickNameExists (enteredName, pokemon) ) {
-          enteredName = prompt ("The entered nickname for that pokemon has already existed. Please enter a different nickname.");
+          enteredName = prompt ("The entered nickname for that pokemon has already existed/invalid. Please enter a different nickname.");
         }
 
         var savedPokemon = {
@@ -279,7 +279,7 @@ export const PokemonDetail = ( route ) => {
               title="Pokemon Database"
               >
               <button>
-                Database
+                Pokemon List
               </button>
             </Link>
 
