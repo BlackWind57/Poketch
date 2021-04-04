@@ -3,10 +3,7 @@ const bodyParser = require('body-parser');
 const serverless = require('serverless-http');
 const path = require('path');
 const ObjectId = require('mongodb').ObjectID;
-
-const MongoClient = require ('mongodb').MongoClient;
-const connectionString = process.env.MONGODB_URI;
-let cachedDB = null;
+const connectToDB = require('./connectToDb');
 
 const app = express();
 const router = express.Router();
@@ -23,26 +20,14 @@ app.use(bodyParser.json());
 
 // API calls
 //
-function connectToDb() {
-  if ( cachedDB ) {
-    console.log('Using cached database instance');
-    return Promise.resolve(cachedDb);
-  }
-  return MongoClient.connect(
-      connectionString,
-      { useUnifiedTopology: true }
-  ).then(db => {
-    cachedDb = db;
-    return cachedDb;
-  });
-}
+
 router.get ('/', (req, res) => {
   res.send ({ text: "You are not authorized to access this site. Please email cristoforus.darryl@gmail.com for further enquiries." });
 });
 
 router.get('/api/my-list', ( req, res ) => {
 
-  connectToDb()
+  connectToDb
   .then(client => {
     console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
@@ -65,7 +50,7 @@ router.get('/api/my-list', ( req, res ) => {
 
 router.post('/api/catch', ( req, res ) => {
 
-  connectToDb()
+  connectToDb
   .then(client => {
     console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
@@ -87,7 +72,7 @@ router.post('/api/catch', ( req, res ) => {
 
 router.post('/api/release', ( req, res ) => {
 
-  connectToDb()
+  connectToDb
   .then(client => {
     console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
