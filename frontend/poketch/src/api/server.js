@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const serverless = require('serverless-http');
 const path = require('path');
 const ObjectId = require('mongodb').ObjectID;
+
 const MongoClient = require ('mongodb').MongoClient;
-const connectionString = "mongodb+srv://b6H7PBTD4GIGUBxV:w9b9YMtAyQmqnEJY@cluster0.9cfel.mongodb.net/pokemons?retryWrites=true&w=majority"
+const connectionString = process.env.MONGODB_URI;
+let cachedDB = null;
 
 const app = express();
 const router = express.Router();
@@ -21,13 +23,26 @@ app.use(bodyParser.json());
 
 // API calls
 //
+function connectToDb() {
+  if ( cachedDB ) {
+    console.log('Using cached database instance');
+    return Promise.resolve(cachedDb);
+  }
+  return MongoClient.connect(
+      connectionString,
+      { useUnifiedTopology: true }
+  ).then(db => {
+    cachedDb = db;
+    return cachedDb;
+  });
+}
 router.get ('/', (req, res) => {
   res.send ({ text: "You are not authorized to access this site. Please email cristoforus.darryl@gmail.com for further enquiries." });
 });
 
 router.get('/api/my-list', ( req, res ) => {
 
-  MongoClient.connect(connectionString, { useUnifiedTopology: true })
+  connectToDb()
   .then(client => {
     console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
@@ -50,7 +65,7 @@ router.get('/api/my-list', ( req, res ) => {
 
 router.post('/api/catch', ( req, res ) => {
 
-  MongoClient.connect(connectionString, { useUnifiedTopology: true })
+  connectToDb()
   .then(client => {
     console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
@@ -72,8 +87,7 @@ router.post('/api/catch', ( req, res ) => {
 
 router.post('/api/release', ( req, res ) => {
 
-  console.log( req.body );
-  MongoClient.connect(connectionString, { useUnifiedTopology: true })
+  connectToDb()
   .then(client => {
     console.log('Connected to Pokemons Database');
     const db = client.db('pokemons');
@@ -81,7 +95,6 @@ router.post('/api/release', ( req, res ) => {
 
     myPokemonCol.findOneAndDelete ( { '_id': ObjectId( req.body._id ) } )
     .then ( response => {
-      console.log( response );
       res.status ( 200 ).end ();
     })
     .catch ( error => {
