@@ -98,7 +98,7 @@ export const PokemonList = () => {
     <React.Fragment>
         <div className="container mx-auto">
           <h3 className="text-center text-3xl mt-20 text-base leading-8 text-black font-bold tracking-wide uppercase">
-            My Owned Pokemons
+            My Pokemons
           </h3>
           <div className="flex items-center mt-24 mb-10">
             <div className="flex-grow text-right px-4 py-2 m-2">

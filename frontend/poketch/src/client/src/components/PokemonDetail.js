@@ -148,8 +148,6 @@ export const PokemonDetail = ( route ) => {
 
   const pokemon = data.pokemon;
 
-  console.log( pokemons );
-
   // Handler
   const handleShowMore = ( expanded ) => {
     if ( expanded ) {
@@ -160,8 +158,8 @@ export const PokemonDetail = ( route ) => {
     }
   }
 
-  const nickNameExists = ( nick_name, pokemon ) => {
-    if ( nick_name === null || nick_name === '' ) return false;
+  const nickNameInvalid = ( nick_name, pokemon ) => {
+    if ( nick_name === null || nick_name === '' ) return true;
 
     for (let i = 0; i < pokemons.length; i++) {
       if ( pokemons[i].name === pokemon.name
@@ -180,7 +178,7 @@ export const PokemonDetail = ( route ) => {
 
         var enteredName = prompt ("Congratulations! You have captured a/an "+ pokemon.name +". Enter the pokemon's nickname.");
 
-        while ( nickNameExists (enteredName, pokemon) ) {
+        while ( nickNameInvalid (enteredName, pokemon) ) {
           enteredName = prompt ("The entered nickname for that pokemon has already existed/invalid. Please enter a different nickname.");
         }
 
