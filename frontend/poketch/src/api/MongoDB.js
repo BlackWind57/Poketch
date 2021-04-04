@@ -2,7 +2,7 @@ const MongoClient = require ('mongodb').MongoClient;
 const connectionString = process.env.MONGODB_URI;
 let cachedDB = null;
 
-module.exports = connectToDb = () => {
+module.exports = connect = () => {
   if ( cachedDB ) {
     console.log('Using cached database instance');
     return Promise.resolve(cachedDb);
