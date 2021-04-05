@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 
-import appReducer from './AppReducer';
+import appReducer from '../context/AppReducer';
 
 const initialState = {
     pokemons: [],
@@ -41,20 +41,36 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
-  function fetchData() {
+  function fetchData ( success ) {
     try {
       if (state.loading) {
-        fetch("/.netlify/functions/server/api/my-list")
-        .then ( response => response.json() )
-        .then ( data => {
-          fetchingMyPokemons ( data );
-        })
-        .catch ( error => {
-          console.error( error );
-          fetchingError ( error );
-        });
+        if ( success ) {
+          // using a sample data from the graphql
+          fetchingMyPokemons ( [
+            {
+              _id: "6068a9c0a9393a000841ff58",
+              name: 'squirtle',
+              nick_name: 'Turtle',
+              image_url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png'
+            },
+            {
+              _id: "6069cc7406a087000713e81e",
+              name: 'wartortle',
+              nick_name: 'negi',
+              image_url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png'
+            },
+            {
+              _id: "6069d5290ccc4300098e0b99",
+              name: 'wartortle',
+              nick_name: 'dasd',
+              image_url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png'
+            }
+          ]);
+        }
+        else {
+          fetchingError ( "You have an error" );
+        }
       }
-
     } catch (e) {
       console.log(e);
     }

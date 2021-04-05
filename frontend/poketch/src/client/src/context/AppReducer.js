@@ -12,16 +12,14 @@ export default function appReducer(state, action) {
       return {
         pokemons: updatedPokemons,
         loading: false,
-        error: '',
-        bodyObject: action.payload
+        error: ''
       }
 
     case "FETCH_ERROR":
       return {
         pokemons: state.pokemons,
         loading: false,
-        error: action.payload,
-        bodyObject: {}
+        error: action.payload
       }
 
     case "REMOVE_POKEMON":

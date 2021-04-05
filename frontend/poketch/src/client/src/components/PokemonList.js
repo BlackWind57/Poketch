@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import React, { useEffect, useContext } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import { GlobalContext } from '../context/GlobalState';
+
 
 import styled from '@emotion/styled';
 
@@ -25,8 +26,8 @@ const GET_POKEMONS = gql `
 `;
 
 const gqlVariables = {
-  limit: 130,
-  offset: 1,
+  limit: 100,
+  offset: 0,
 };
 
 /////////////////// CSS START
@@ -71,10 +72,16 @@ const Box = styled.div`
 
 
 export const PokemonList = () => {
+  const { fetchData } = useContext ( GlobalContext );
 
   // Fetch pokemons from Pokemon Graphql as data
   const { loading, error, data } = useQuery(GET_POKEMONS, {
     variables: gqlVariables,
+  });
+
+  useEffect ( () => {
+      // Fetch pokemons from db
+      fetchData();
   });
 
   if (loading) return 'Loading...';
@@ -85,7 +92,7 @@ export const PokemonList = () => {
   return (
     <React.Fragment>
       {data.pokemons.results.length > 0 ? (
-        <Container>
+        <Container data-testid="test">
           <React.Fragment>
             {data.pokemons.results.map( (pokemon, i) => (
               <Link
@@ -106,7 +113,7 @@ export const PokemonList = () => {
           </React.Fragment>
         </Container>
       ) : (
-        <p className="text-center bg-gray-100 text-gray-500 py-5">No data.</p>
+        <p className="text-center bg-gray-100 text-gray-500 py-5" data-testid="test">No data.</p>
       )}
     </React.Fragment>
   );
