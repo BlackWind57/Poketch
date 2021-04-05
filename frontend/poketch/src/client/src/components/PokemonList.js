@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalState';
@@ -25,11 +25,6 @@ const GET_POKEMONS = gql `
   }
 `;
 
-const gqlVariables = {
-  limit: 100,
-  offset: 0,
-};
-
 /////////////////// CSS START
 const Item = styled.div`
   text-align: center;
@@ -46,6 +41,7 @@ const Container = styled.div`
   margin-left: 20px;
   margin-right: 20px;
   justify-content: center;
+  padding-bottom: 10px;
 
   /* Responsive layout - makes a one column layout instead of a two-column layout */
   @media (max-width: 320) {
@@ -67,6 +63,13 @@ const Box = styled.div`
   --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(0 0 #0000, 0 0 #0000), var(--tw-shadow);
 `;
+
+const ShowMoreLink = styled.a`
+  padding-bottom: 20px;
+  text-decoration: underline;
+  font-size: 14px;
+`;
+
 //////////////////// CSS ENDS
 
 
@@ -74,9 +77,13 @@ const Box = styled.div`
 export const PokemonList = () => {
   const { fetchData } = useContext ( GlobalContext );
 
+  const [showMore, setShowMore] = useState ({
+    count: 9
+  });
+
   // Fetch pokemons from Pokemon Graphql as data
   const { loading, error, data } = useQuery(GET_POKEMONS, {
-    variables: gqlVariables,
+    variables: { limit: showMore.count }
   });
 
   useEffect ( () => {
@@ -87,34 +94,51 @@ export const PokemonList = () => {
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
+  const handleShowMore = ( count ) => {
+    setShowMore ( { ...showMore, count: count + 9 } );
+  }
+
   console.log('Response from server', data);
 
   return (
-    <React.Fragment>
-      {data.pokemons.results.length > 0 ? (
-        <Container data-testid="test">
-          <React.Fragment>
-            {data.pokemons.results.map( (pokemon, i) => (
-              <Link
-                to={`/detail/${pokemon.name}`}
-                title=""
-                key={pokemon.name}
-              >
-                <Box>
-                    <Item>
-                      <Image src={pokemon.image} alt={ pokemon.url } />
-                      <p className="text-gray-900 leading-none">
-                        { String.capitalizeFirstLetter( pokemon.name ) }
-                      </p>
-                    </Item>
-                </Box>
-              </Link>
-            ))}
-          </React.Fragment>
-        </Container>
-      ) : (
-        <p className="text-center bg-gray-100 text-gray-500 py-5" data-testid="test">No data.</p>
-      )}
-    </React.Fragment>
+    <>
+      <React.Fragment>
+        {data.pokemons.results.length > 0 ? (
+          <>
+            <Container data-testid="test">
+              <React.Fragment>
+                {data.pokemons.results.map( (pokemon, i) => (
+                  <Link
+                    to={`/detail/${pokemon.name}`}
+                    title=""
+                    key={pokemon.name}
+                  >
+                    <Box>
+                        <Item>
+                          <Image src={pokemon.image} alt={ pokemon.url } />
+                          <p className="text-gray-900 leading-none">
+                            { String.capitalizeFirstLetter( pokemon.name ) }
+                          </p>
+                        </Item>
+                    </Box>
+                  </Link>
+                ))}
+              </React.Fragment>
+            </Container>
+            <React.Fragment>
+              { (
+                  <ShowMoreLink
+                    onClick={ (e) => handleShowMore( showMore.count ) }>
+                    Show More
+                  </ShowMoreLink>
+                )
+              }
+            </React.Fragment>
+          </>
+        ) : (
+          <p className="text-center bg-gray-100 text-gray-500 py-5" data-testid="test">No data.</p>
+        )}
+      </React.Fragment>
+    </>
   );
 };

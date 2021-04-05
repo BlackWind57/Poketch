@@ -44,6 +44,7 @@ const Container = styled.div `
   min-height: 100vh;
   background-image: linear-gradient(175deg, #eaee44, #33d0ff);
   opacity: 0.7;
+  padding-bottom: 67px;
 
   h4 {
     font-weight: bold;
@@ -67,7 +68,6 @@ const Content = styled.div `
   box-shadow: var ( 0 0 #0000, 0 0 #0000), var(0 0 #0000, 0 0 #0000), var(0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06));
   border-radius: 8px;
   padding-bottom: 20px;
-  margin-bottom: 20px;
 `;
 
 const Title = styled.div `
@@ -94,6 +94,7 @@ const Type = styled.div `
 const Move = styled.div `
   display: flex;
   flex-wrap: wrap;
+  overflow-y: scroll;
 
   p {
     margin: 5px 0;
@@ -103,7 +104,7 @@ const Move = styled.div `
 
 const BottomMenu = styled.div `
   position: fixed;
-  bottom: 20px;
+  bottom: 10px;
   justify-content: center;
   text-align: center;
   width: 100%;
@@ -130,8 +131,7 @@ export const PokemonDetail = ( route ) => {
   const { addPokemonToMyList, pokemons, fetchData } = useContext(GlobalContext);
 
   const [showMore, setShowMore] = useState ({
-    count: 4,
-    expanded: false
+    count: 4
   });
 
   useEffect ( () => {
@@ -149,13 +149,8 @@ export const PokemonDetail = ( route ) => {
   const pokemon = data.pokemon;
 
   // Handler
-  const handleShowMore = ( expanded ) => {
-    if ( expanded ) {
-      setShowMore ( { ...showMore, count: pokemon.moves.length, expanded: expanded } );
-    }
-    else {
-      setShowMore ( { ...showMore, count: 4, expanded: expanded } );
-    }
+  const handleShowMore = ( count ) => {
+    setShowMore ( { ...showMore, count: count + 4 } );
   }
 
   const nickNameInvalid = ( nick_name, pokemon ) => {
@@ -224,52 +219,45 @@ export const PokemonDetail = ( route ) => {
   return (
     <React.Fragment>
         <Container>
+              <ImageBox>
+                <img src={pokemon.sprites.front_default} alt={ pokemon.name } />
+              </ImageBox>
 
-          <ImageBox>
-            <img src={pokemon.sprites.front_default} alt={ pokemon.name } />
-          </ImageBox>
+              <Content>
 
-          <Content>
+                  <Title>
+                    { String.capitalizeFirstLetter( pokemon.name ) }
+                  </Title>
 
-              <Title>
-                { String.capitalizeFirstLetter( pokemon.name ) }
-              </Title>
+                  <Description>
+                    <Type>
+                      { pokemon.types.map ( (child, i ) => (
+                        <p key="i">{ String.capitalizeFirstLetter ( child.type.name ) } Type</p>
+                      ))}
+                    </Type>
+                    <hr />
 
-              <Description>
-                <Type>
-                  { pokemon.types.map ( (child, i ) => (
-                    <p key="i">{ String.capitalizeFirstLetter ( child.type.name ) } Type</p>
-                  ))}
-                </Type>
-                <hr />
+                    <h4>Moves</h4>
 
-                <h4>Moves</h4>
+                      <Move>
+                        { pokemon.moves.slice (0, showMore.count ).map ( ( child, i ) => (
+                            <p key={child.move.name}>
+                              { String.capitalizeFirstLetter ( child.move.name ) }
+                            </p>
+                        ))}
+                      </Move>
 
-                  <Move>
-                    { pokemon.moves.slice (0, showMore.count ).map ( ( child, i ) => (
-                        <p key={child.move.name}>
-                          { String.capitalizeFirstLetter ( child.move.name ) }
-                        </p>
-                    ))}
-                  </Move>
-
-                  { showMore.expanded === true ? (
-                      <a
-                        onClick={ (e) => handleShowMore( false ) }>
-                        Show Less
-                      </a>
-                    ) : (
-                      <a
-                        onClick={ (e) => handleShowMore( true ) }>
-                        Show More
-                      </a>
-                    )
-                  }
+                      { (
+                          <a
+                            onClick={ (e) => handleShowMore( showMore.count ) }>
+                            Show More
+                          </a>
+                        )
+                      }
 
 
-              </Description>
-
-          </Content>
+                  </Description>
+              </Content>
 
           <BottomMenu>
             <Link

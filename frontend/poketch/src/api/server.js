@@ -19,6 +19,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // API calls
+router.get('*.js', function (req, res, next) {
+  req.url = req.url + '.gz';
+  res.set('Content-Encoding', 'gzip');
+  next();
+});
+
 router.get ('/', (req, res) => {
   res.send ({ text: "You are not authorized to access this site. Please email cristoforus.darryl@gmail.com for further enquiries." });
 });
@@ -86,6 +92,7 @@ router.post('/api/release', ( req, res ) => {
 });
 
 app.use('/.netlify/functions/server', router);
+
 
 
 if (process.env.NODE_ENV === 'production') {
