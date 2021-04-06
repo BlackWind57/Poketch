@@ -1,5 +1,5 @@
 {
-  "name": "poketch",
+  "name": "poketch-reactjs",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,7 +19,6 @@
     "babel-loader": "8.1.0",
     "babel-preset-env": "^1.7.0",
     "body-parser": "^1.19.0",
-    "compression-webpack-plugin": "^7.1.2",
     "cross-fetch": "^3.1.4",
     "env-cmd": "^10.1.0",
     "eslint-plugin-jest": "24.1.3",
@@ -38,12 +37,25 @@
     "react-test-renderer": "^17.0.2",
     "react-testing-library": "^8.0.1",
     "regenerator-runtime": "^0.13.7",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "web-vitals": "^1.0.1",
-    "webpack": "^4.44.2"
+    "webpack": "^4.44.2",
+    "workbox-background-sync": "^5.1.3",
+    "workbox-broadcast-update": "^5.1.3",
+    "workbox-cacheable-response": "^5.1.3",
+    "workbox-core": "^5.1.3",
+    "workbox-expiration": "^5.1.3",
+    "workbox-google-analytics": "^5.1.3",
+    "workbox-navigation-preload": "^5.1.3",
+    "workbox-precaching": "^5.1.3",
+    "workbox-range-requests": "^5.1.3",
+    "workbox-routing": "^5.1.3",
+    "workbox-strategies": "^5.1.3",
+    "workbox-streams": "^5.1.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && NODE_ENV=production webpack --config ./webpack.config.prod.js",
+    "build": "react-scripts build",
     "test": "jest ",
     "eject": "react-scripts eject"
   },
@@ -67,7 +79,8 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.13.13",
-    "node-env-run": "^4.0.2"
+    "node-env-run": "^4.0.2",
+    "webpack-cli": "^4.6.0"
   },
   "jest": {
     "setupFilesAfterEnv": [
