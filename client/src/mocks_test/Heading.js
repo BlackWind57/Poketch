@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { GlobalContext } from '../context/GlobalState';
+import { GlobalContext } from './GlobalState';
 
 import styled from '@emotion/styled';
-
 
 const HeadingDiv = styled.div `
   display: flex;
@@ -31,12 +30,7 @@ const HeadingDiv = styled.div `
   button:hover {
     background-color: rgba(16, 185, 129, 1);
   }
-
-  span {
-    padding-left: 8px;
-  }
 `;
-
 
 export const Heading = () => {
   const { pokemons } = useContext(GlobalContext);
@@ -47,7 +41,7 @@ export const Heading = () => {
         <div>
           <Link to="/my-list">
             <button>
-              <span className="pl-2">My Pokemons ({ pokemons.length })</span>
+              <span id="pokemon-title">My Pokemons ({ pokemons.length })</span>
             </button>
           </Link>
         </div>

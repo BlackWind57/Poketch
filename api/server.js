@@ -4,6 +4,26 @@ const serverless = require('serverless-http');
 const path = require('path');
 const ObjectId = require('mongodb').ObjectID;
 const { connect } = require('./MongoDB');
+var mcached = require ('memory-cache');
+
+var cache = ( duration ) => {
+  return ( req, res, next ) => {
+    let key = '__express__' + req.originalUrl || req.url;
+    let cachedBody = mcached.get ( key );
+
+    if ( cachedBody ) {
+      res.send ( cachedBody ); return;
+    }
+    else {
+      res.sendResponse = res.send;
+      res.send = (body) => {
+        mcached.put ( key, body, duration * 1000);
+        res.sendResponse ( body );
+      }
+      next();
+    }
+  }
+}
 
 const app = express();
 const router = express.Router();
@@ -30,7 +50,7 @@ router.get ('/', (req, res) => {
   res.send ({ text: "You are not authorized to access this site. Please email cristoforus.darryl@gmail.com for further enquiries." });
 });
 
-router.get('/api/my-list', ( req, res ) => {
+router.get('/api/my-list', cache(20), ( req, res ) => {
   connect()
   .then(client => {
     const db = client.db('pokemons');
@@ -51,7 +71,7 @@ router.get('/api/my-list', ( req, res ) => {
   // TODO: return list of my pokemon list
 });
 
-router.post('/api/catch', ( req, res ) => {
+router.post('/api/catch', cache(20), ( req, res ) => {
 
   connect()
   .then(client => {
@@ -72,7 +92,7 @@ router.post('/api/catch', ( req, res ) => {
   // TODO: catch pokemon and put in my pokemon list
 });
 
-router.post('/api/release', ( req, res ) => {
+router.post('/api/release', cache(20), ( req, res ) => {
 
   connect()
   .then(client => {

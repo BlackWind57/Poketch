@@ -8,7 +8,7 @@ import MathLib from '../lib/MathLib';
 
 import styled from '@emotion/styled';
 
-
+// Query to fetch data from Graphql
 const GET_POKEMON_DETAIL = gql `
   query pokemon($name: String!) {
     pokemon(name: $name) {
@@ -126,19 +126,21 @@ const BottomMenu = styled.div `
 
 `;
 
-
+// Main Component of Pokemon Detail
 export const PokemonDetail = ( route ) => {
   const { addPokemonToMyList, pokemons, fetchData } = useContext(GlobalContext);
 
+  //set initial state of showMore for number of moves
   const [showMore, setShowMore] = useState ({
     count: 4
   });
 
+  // Component did mount => fetch data from MongoDB
   useEffect ( () => {
     fetchData();
   });
 
-  // Get detail of the pokemon
+  // Fetch detail of pokemon from Pokemon Graphql as data
   const { loading, error, data } = useQuery(GET_POKEMON_DETAIL, {
     variables: { name: route.match.params.name },
   });
@@ -148,11 +150,16 @@ export const PokemonDetail = ( route ) => {
 
   const pokemon = data.pokemon;
 
-  // Handler
+  // User Handlers and functions
+
+  // Show more increments by 4 items
   const handleShowMore = ( count ) => {
     setShowMore ( { ...showMore, count: count + 4 } );
   }
 
+  // Checks if nickname is invalid:
+  // - Condition: if there's a pokemon exist with
+  //  same nickname and same name, it is invalid
   const nickNameInvalid = ( nick_name, pokemon ) => {
     if ( nick_name === null || nick_name === '' ) return true;
 
@@ -165,6 +172,8 @@ export const PokemonDetail = ( route ) => {
     return false;
   }
 
+  // Handles the 50% success rate of catching the pokemon
+  // Caught if nickname is valid
   const handleSuccessCatch = ( pokemon ) => {
     try {
       let num = MathLib.randomNumber ();
@@ -193,6 +202,9 @@ export const PokemonDetail = ( route ) => {
     }
   }
 
+  // Handles the catch pokemon => where the system stores
+  // the pokemon to the database.
+  // If successful, update the global pokemons state
   const handleCatch = async ( pokemon ) => {
 
     try {
@@ -216,6 +228,7 @@ export const PokemonDetail = ( route ) => {
     }
   }
 
+  // Render the Component
   return (
     <React.Fragment>
         <Container>
@@ -255,14 +268,13 @@ export const PokemonDetail = ( route ) => {
                         )
                       }
 
-
                   </Description>
               </Content>
 
           <BottomMenu>
             <Link
               to="/"
-              title="Pokemon Database"
+              title="Pokemon List"
               >
               <button>
                 Pokemon List
@@ -278,7 +290,7 @@ export const PokemonDetail = ( route ) => {
 
               <Link
                 to="/my-list"
-                title="Pokemon Database"
+                title="My Pokemon"
                 >
                 <button>
                   My Pokemon

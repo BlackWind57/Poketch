@@ -8,6 +8,7 @@ import styled from '@emotion/styled';
 
 import String from '../lib/String';
 
+// Query to fetch the list of pokemons from Graphql
 const GET_POKEMONS = gql `
   query pokemons($limit: Int, $offset: Int) {
     pokemons(limit: $limit, offset: $offset) {
@@ -25,7 +26,7 @@ const GET_POKEMONS = gql `
   }
 `;
 
-/////////////////// CSS START
+// CSS START
 const Item = styled.div`
   text-align: center;
 `;
@@ -70,13 +71,12 @@ const ShowMoreLink = styled.a`
   font-size: 14px;
 `;
 
-//////////////////// CSS ENDS
-
-
-
+// Main Component of Pokemon List
 export const PokemonList = () => {
+
   const { fetchData } = useContext ( GlobalContext );
 
+  // set initial state of showMore for number of pokemons
   const [showMore, setShowMore] = useState ({
     count: 9
   });
@@ -94,12 +94,12 @@ export const PokemonList = () => {
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
+  // show more pokemons in increments of 9 items
   const handleShowMore = ( count ) => {
     setShowMore ( { ...showMore, count: count + 9 } );
   }
 
-  console.log('Response from server', data);
-
+  // Render the Component
   return (
     <>
       <React.Fragment>

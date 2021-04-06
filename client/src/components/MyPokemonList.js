@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 
 import String from '../lib/String';
 
-
+// CSS
 const Item = styled.div`
   text-align: center;
 
@@ -58,7 +58,7 @@ const Box = styled.div`
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(0 0 #0000, 0 0 #0000), var(--tw-shadow);
 `;
 
-
+// Main Component of My Pokemon List
 export const PokemonList = () => {
   const {
     pokemons,
@@ -68,6 +68,7 @@ export const PokemonList = () => {
     fetchData
   } = useContext(GlobalContext);
 
+  //
   useEffect ( () => {
       // Fetch pokemons from db
       fetchData();
