@@ -1,6 +1,6 @@
 const MongoClient = require ('mongodb').MongoClient;
 const connectionString = "mongodb+srv://b6H7PBTD4GIGUBxV:w9b9YMtAyQmqnEJY@cluster0.9cfel.mongodb.net/pokemons?retryWrites=true&w=majority";
-let cachedDB = null;
+var cachedDB = null;
 
 module.exports = {
   connect:() => {
